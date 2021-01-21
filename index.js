@@ -20,7 +20,7 @@ let songMap = {
 
 bot.login(token);
 bot.on("ready", () => {
-  console.log("Ready!");
+  console.log("I GWER UP");
 })
 bot.on("message", async (message) => {
   voiceChannel = message.member.voice.channel
@@ -50,12 +50,14 @@ bot.on("message", async (message) => {
 function playAudio(message, song) {
   voiceChannel.join().then(connection => {
     dispatcher = connection.play(song.file);
+    // dispatcher.setVolume(1);
     dispatcher.on('start', () => {
       message.channel.send(song.message);
     })
     dispatcher.on('finish', () => {
       console.log('AAAAHH MI PICHULA');
-      playAudio();
+      dispatcher.destroy();
+      voiceChannel.leave();
     })
   }).catch(e => {
     console.error(e);
