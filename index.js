@@ -24,17 +24,26 @@ bot.on("ready", () => {
 })
 bot.on("message", async (message) => {
   voiceChannel = message.member.voice.channel
+  let role = message.guild.roles.cache.find(r => r.name == "Presentadores");
+
   if (message.author.bot) return;
-  if (!message.content.startsWith(`${prefix}`)) return;
-  if (message.content.startsWith(`${prefix}stop`)) {
-    dispatcher.destroy();
-    voiceChannel.leave();
-  }
-  if (message.content.startsWith(`${prefix}award`)) {
-    playAudio(message, songMap.award);
-  }
-  if (message.content.startsWith(`${prefix}clap`)) {
-    playAudio(message, songMap.clap);
+
+  if (message.member.roles.cache.has(role.id)) {
+    if (!message.content.startsWith(`${prefix}`)) return;
+    else if (message.content.startsWith(`${prefix}stop`)) {
+      dispatcher.destroy();
+      voiceChannel.leave();
+    }
+    else if (message.content.startsWith(`${prefix}award`)) {
+      playAudio(message, songMap.award);
+    }
+    else if (message.content.startsWith(`${prefix}clap`)) {
+      playAudio(message, songMap.clap);
+    } else {
+      message.channel.send('Habla bien pelotudo');
+    }
+  } else {
+    message.channel.send('Y vos quien carajos sos? Sali de aca')
   }
 })
 
